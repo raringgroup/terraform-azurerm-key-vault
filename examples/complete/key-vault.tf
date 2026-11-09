@@ -14,18 +14,17 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/key-vault/examples/complete/key-vault.tf
+##  examples/complete/key-vault.tf
 ##
 ##  Creates a resource group and an RBAC-authorized key vault. Purge protection
 ##  is off so the example can be destroyed and re-created.
 ## ----------------------------------------------------------------------------
 
 ## Resource Group
-module "resource_group" {
-  source  = "../../../resource-group"
-  context = module.context.self
-
+resource "azurerm_resource_group" "this" {
   location = var.region
+  name     = "${module.context.id}-rg"
+  tags     = module.context.tags
 }
 
 
@@ -34,11 +33,11 @@ module "key_vault" {
   source  = "../../"
   context = module.context.self
 
-  location                      = module.resource_group.location
+  location                      = azurerm_resource_group.this.location
   public_network_access_enabled = true
   purge_protection_enabled      = false
   rbac_authorization_enabled    = true
-  resource_group_name           = module.resource_group.name
+  resource_group_name           = azurerm_resource_group.this.name
   sku_name                      = "standard"
   soft_delete_retention_days    = 7
 

@@ -1,6 +1,6 @@
 # key-vault
 
-Creates an Azure Key Vault that supports both authorization models, Azure RBAC and access policies, selected by `rbac_authorization_enabled`. It also manages optional role assignments (RBAC) or access policies on the vault, named through the SevenPico context module.
+Creates an Azure Key Vault that supports both authorization models, Azure RBAC and access policies, selected by `rbac_authorization_enabled`. It also manages optional role assignments (RBAC) or access policies on the vault. Everything is named through the `null-context` module.
 
 ## Requirements
 
@@ -11,7 +11,20 @@ Creates an Azure Key Vault that supports both authorization models, Azure RBAC a
 
 ## Module Priority
 
-No SevenPico, SevenPicoForks or CloudPosse module exists for Azure Key Vault, so the module uses `azurerm_key_vault`, `azurerm_role_assignment` and `azurerm_key_vault_access_policy` directly. The vault name is limited to 24 characters, the Azure maximum. The tenant ID is read from `azurerm_client_config` and is never an input. Naming and the enabled flag come from the context module. `_context.tf` declares the root context (`SevenPico/context/null` `2.0.0`); child contexts use the local `../null-context` module.
+No SevenPico, SevenPicoForks or CloudPosse module exists for Azure Key Vault, so the module uses `azurerm_key_vault`, `azurerm_role_assignment` and `azurerm_key_vault_access_policy` directly. The vault name is limited to 24 characters, the Azure maximum. The tenant ID is read from `azurerm_client_config` and is never an input. `_context.tf` declares the root context; it and the child contexts use `git::https://github.com/raringgroup/terraform-null-context.git?ref=v0.1.0`.
+
+## Naming
+
+The vault name is built by `null-context` from the context inputs plus the type token `kv`. These inputs produce `kv-upsis-dev-ehssync` (20 characters, under the 24-character limit):
+
+```hcl
+inputs = {
+  namespace   = "upsis"
+  environment = "dev"
+  name        = "ehssync"
+  label_order = ["attributes", "namespace", "environment", "name"]
+}
+```
 
 ## Inputs
 
@@ -22,7 +35,7 @@ All inputs are required (no defaults). Context inputs (`enabled`, `namespace`, `
 | resource_group_name | `string` | Resource group that holds the vault |
 | location | `string` | Azure region |
 | sku_name | `string` | `standard` or `premium` |
-| soft_delete_retention_days | `number` | Retention for deleted vaults and objects (7 to 90) |
+| soft_delete_retention_days | `number` | Retention for deleted vaults and objects, 7 to 90 |
 | purge_protection_enabled | `bool` | Purge protection; cannot be turned off once enabled |
 | public_network_access_enabled | `bool` | Accept traffic from the public network |
 | rbac_authorization_enabled | `bool` | `true` uses Azure RBAC, `false` uses access policies |
@@ -42,29 +55,21 @@ All inputs are required (no defaults). Context inputs (`enabled`, `namespace`, `
 
 ```hcl
 terraform {
-  source = "git::<repo-url>//modules/key-vault?ref=key-vault-v<version>"
-}
-
-dependency "resource_group" {
-  config_path = "../resource-group"
-}
-
-dependency "app_service" {
-  config_path = "../app-service"
+  source = "git::https://github.com/raringgroup/terraform-azurerm-key-vault.git?ref=develop"
 }
 
 inputs = {
   enabled     = true
   namespace   = "<namespace>"
   environment = "<environment>"
-  stage       = "<stage>"
   name        = "<name>"
+  label_order = ["attributes", "namespace", "environment", "name"]
 
-  location                      = dependency.resource_group.outputs.location
+  location                      = "<azure-region>"
   public_network_access_enabled = true
   purge_protection_enabled      = true
   rbac_authorization_enabled    = true
-  resource_group_name           = dependency.resource_group.outputs.name
+  resource_group_name           = "<resource-group>"
   sku_name                      = "standard"
   soft_delete_retention_days    = 90
 
@@ -79,7 +84,7 @@ inputs = {
 
   role_assignments = {
     "app-secrets-user" = {
-      principal_id         = dependency.app_service.outputs.principal_id
+      principal_id         = "<principal-id>"
       role_definition_name = "Key Vault Secrets User"
     }
   }

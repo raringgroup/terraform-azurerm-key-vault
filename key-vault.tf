@@ -21,7 +21,7 @@
 
 ## Key Vault Context
 module "key_vault_context" {
-  source  = "../null-context"
+  source  = "git::https://github.com/raringgroup/terraform-null-context.git?ref=v0.1.0"
   context = module.context.self
 
   attributes      = ["kv"]
