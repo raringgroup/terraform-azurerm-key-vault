@@ -14,7 +14,7 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/key-vault/examples/complete/_outputs.tf
+##  examples/complete/_outputs.tf
 ##
 ##  Outputs of the example.
 ## ----------------------------------------------------------------------------

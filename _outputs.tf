@@ -14,7 +14,7 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/key-vault/_outputs.tf
+##  _outputs.tf
 ##
 ##  Output values for the Key Vault module.
 ## ----------------------------------------------------------------------------

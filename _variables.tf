@@ -14,7 +14,7 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/key-vault/_variables.tf
+##  _variables.tf
 ##
 ##  Input variables for the Key Vault module.
 ## ----------------------------------------------------------------------------

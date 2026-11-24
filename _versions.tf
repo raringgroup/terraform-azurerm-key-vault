@@ -14,7 +14,7 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/key-vault/_versions.tf
+##  _versions.tf
 ##
 ##  Terraform and AzureRM provider version constraints.
 ## ----------------------------------------------------------------------------
