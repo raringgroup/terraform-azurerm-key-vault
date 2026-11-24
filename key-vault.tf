@@ -14,7 +14,7 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/key-vault/key-vault.tf
+##  key-vault.tf
 ##
 ##  Azure Key Vault supporting Azure RBAC or access policies, with role assignments.
 ## ----------------------------------------------------------------------------

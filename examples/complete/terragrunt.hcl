@@ -16,12 +16,12 @@
 
 # TERRAGRUNT — KEY VAULT EXAMPLE
 # ------------------------------------------------------------------------------
-# modules/key-vault/examples/complete/terragrunt.hcl
+# examples/complete/terragrunt.hcl
 #
 # Deploys the key-vault example to Azure. Generates the azurerm provider and
 # backend and passes the standard context inputs.
 #
-# Module: modules/key-vault
+# Module: terraform-azurerm-key-vault
 # ------------------------------------------------------------------------------
 
 locals {
